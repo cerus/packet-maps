@@ -1,0 +1,4 @@
+de\cerus\packetmaps\core\command\TestCommand.class
+de\cerus\packetmaps\core\factory\DrawAdapterFactory.class
+de\cerus\packetmaps\core\factory\NmsAdapterFactory.class
+de\cerus\packetmaps\core\PacketMapsPlugin.class
