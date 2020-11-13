@@ -9,6 +9,7 @@
     <version>1.0.0</version>
 
     <modules>
+        <module>plugin</module>
         <module>core</module>
         <module>nms-base</module>
         <module>nms-v1_16_3</module>

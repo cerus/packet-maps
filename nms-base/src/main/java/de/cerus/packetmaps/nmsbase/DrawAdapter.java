@@ -1,5 +1,7 @@
 package de.cerus.packetmaps.nmsbase;
 
+import java.awt.image.BufferedImage;
+
 public interface DrawAdapter {
 
     default void fill(final byte color) {
@@ -19,6 +21,55 @@ public interface DrawAdapter {
 
     void fillSphere(int originX, int originZ, int radius, byte color);
 
+    void setPixel(int x, int z, byte color);
+
+    default void drawImage(final BufferedImage image) {
+        this.drawImage(image, 0, 0, image.getWidth(), image.getHeight());
+    }
+
+    void drawImage(BufferedImage image, int x, int z, int width, int height);
+
+    DiffResult diff(DrawAdapter drawAdapter);
+
     byte[][] toArray();
 
+    byte[] toSingleArray();
+
+    class DiffResult {
+
+        private final int minX;
+        private final int minZ;
+        private final int width;
+        private final int height;
+        private final byte[] data;
+
+        public DiffResult(final int minX, final int minZ, final int width, final int height, final byte[] data) {
+            this.minX = minX;
+            this.minZ = minZ;
+            this.width = width;
+            this.height = height;
+            this.data = data;
+        }
+
+        public int getMinX() {
+            return this.minX;
+        }
+
+        public int getMinZ() {
+            return this.minZ;
+        }
+
+        public int getWidth() {
+            return this.width;
+        }
+
+        public int getHeight() {
+            return this.height;
+        }
+
+        public byte[] getData() {
+            return this.data;
+        }
+
+    }
 }

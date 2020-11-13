@@ -1,0 +1,5 @@
+name: PacketMaps
+author: Cerus
+version: ${project.version}
+main: de.cerus.packetmaps.plugin.PacketMapsPlugin
+api-version: 1.16

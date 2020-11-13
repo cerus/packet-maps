@@ -1,4 +1,9 @@
-de\cerus\packetmaps\core\command\TestCommand.class
+de\cerus\packetmaps\core\gif\task\GifRendererTask.class
+de\cerus\packetmaps\core\pmcache\PMCacheUtil.class
 de\cerus\packetmaps\core\factory\DrawAdapterFactory.class
+de\cerus\packetmaps\core\pmcache\Cache.class
+de\cerus\packetmaps\core\command\TestCommand.class
+de\cerus\packetmaps\core\pmcache\VideoCache.class
+de\cerus\packetmaps\core\command\TestCommand$1.class
 de\cerus\packetmaps\core\factory\NmsAdapterFactory.class
-de\cerus\packetmaps\core\PacketMapsPlugin.class
+de\cerus\packetmaps\core\pmcache\GifCache.class

@@ -1,2 +1,5 @@
 de\cerus\packetmaps\nmsbase\MapIcon.class
 de\cerus\packetmaps\nmsbase\MapIcon$Type.class
+de\cerus\packetmaps\nmsbase\screen\MapScreen.class
+de\cerus\packetmaps\nmsbase\util\ReflectionUtil.class
+de\cerus\packetmaps\nmsbase\screen\ScreenGraphics.class
