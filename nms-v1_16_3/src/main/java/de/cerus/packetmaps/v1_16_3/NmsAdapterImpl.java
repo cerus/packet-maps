@@ -90,6 +90,12 @@ public class NmsAdapterImpl implements NmsAdapter {
         return (byte) this.matchRgbPalette(r, g, b).getId();
     }
 
+    @Override
+    public Color matchColor(final byte color) {
+        final MapPalette mapPalette = MapPalette.fromId(color);
+        return mapPalette == null ? MapPalette.TRANSPARENT_2.getColor() : mapPalette.getColor();
+    }
+
     public MapPalette matchRgbPalette(final int r, final int g, final int b) {
         return Arrays.stream(MapPalette.values())
                 .filter(mapPalette -> mapPalette.getId() > 3)

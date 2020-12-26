@@ -278,7 +278,11 @@ public enum MapPalette {
         this.color = color;
     }
 
-    public static MapPalette fromId(final int id) {
+    public static MapPalette fromId(int id) {
+        if (id < 0) {
+            id += 256;
+        }
+
         for (final MapPalette value : values()) {
             if (value.getId() == id) {
                 return value;

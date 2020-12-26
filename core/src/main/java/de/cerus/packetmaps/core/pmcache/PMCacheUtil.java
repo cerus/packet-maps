@@ -70,15 +70,11 @@ public class PMCacheUtil {
 
     private static <T extends Cache> T readV0(final DataInputStream dataInputStream) throws IOException {
         final int type = dataInputStream.readInt();
-        System.out.println("type is " + type);
 
         final Cache cache;
         switch (type) {
-            case GifCache.ID:
-                cache = new GifCache();
-                break;
-            case VideoCache.ID:
-                cache = new VideoCache();
+            case FramedCache.ID:
+                cache = new FramedCache();
                 break;
             default:
                 throw new IllegalStateException("Unknown type");

@@ -1,5 +1,6 @@
 package de.cerus.packetmaps.nmsbase;
 
+import java.awt.Color;
 import java.util.Collection;
 import org.bukkit.entity.Player;
 
@@ -14,5 +15,7 @@ public interface NmsAdapter {
     Object constructFramePacket(int frameId, int mapId);
 
     byte matchRgb(int r, int g, int b);
+
+    Color matchColor(byte color);
 
 }

@@ -8,31 +8,32 @@ import co.aikar.commands.annotation.Subcommand;
 import de.cerus.jgif.GifImage;
 import de.cerus.packetmaps.core.factory.DrawAdapterFactory;
 import de.cerus.packetmaps.core.gif.task.GifRendererTask;
-import de.cerus.packetmaps.core.pmcache.GifCache;
+import de.cerus.packetmaps.core.pmcache.FramedCache;
 import de.cerus.packetmaps.core.pmcache.PMCacheUtil;
-import de.cerus.packetmaps.core.pmcache.VideoCache;
+import de.cerus.packetmaps.core.screen.MapScreen;
+import de.cerus.packetmaps.core.screen.threedim.Vertex;
+import de.cerus.packetmaps.core.screen.threedim.shape.Triangle;
 import de.cerus.packetmaps.nmsbase.NmsAdapter;
-import de.cerus.packetmaps.nmsbase.screen.MapScreen;
 import de.cerus.packetmaps.plugin.util.EntityUtil;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.bukkit.Bukkit;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
-import org.jcodec.common.io.NIOUtils;
 
 @CommandAlias("packetmaps|maps")
 public class PacketMapsCommand extends BaseCommand {
@@ -40,7 +41,26 @@ public class PacketMapsCommand extends BaseCommand {
     private static final String FORMAT = "§6Packet Maps §8» §7%s";
 
     private final Map<Integer, MapScreen> temporaryScreenMap = new HashMap<>();
-
+    private final List<Triangle> tris = new ArrayList<Triangle>() {
+        {
+            this.add(new Triangle(new Vertex(100, 100, 100),
+                    new Vertex(-100, -100, 100),
+                    new Vertex(-100, 100, -100),
+                    Color.WHITE));
+            this.add(new Triangle(new Vertex(100, 100, 100),
+                    new Vertex(-100, -100, 100),
+                    new Vertex(100, -100, -100),
+                    Color.RED));
+            this.add(new Triangle(new Vertex(-100, 100, -100),
+                    new Vertex(100, -100, -100),
+                    new Vertex(100, 100, 100),
+                    Color.GREEN));
+            this.add(new Triangle(new Vertex(-100, 100, -100),
+                    new Vertex(100, -100, -100),
+                    new Vertex(-100, -100, 100),
+                    Color.BLUE));
+        }
+    };
     @Dependency
     private JavaPlugin plugin;
     @Dependency
@@ -50,64 +70,6 @@ public class PacketMapsCommand extends BaseCommand {
 
     @CatchUnknown
     public void handleUnknown(final Player player) {
-    }
-
-    @Subcommand("vid")
-    public void handleVid(final Player player, final String path) {
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            final File file = new File(path);
-            try {
-                final FrameGrab grab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(file));
-                final VideoCache videoCache = VideoCache.buildCache(grab, this.nmsAdapter);
-                PMCacheUtil.write(new File("./" + UUID.randomUUID().toString() + ".pmcache"), videoCache);
-                player.sendMessage("done");
-            } catch (final IOException | JCodecException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    @Subcommand("vid2")
-    public void handleVid2(final Player player, final int screenId, final String path) {
-        if (!PacketMapsCommand.this.temporaryScreenMap.containsKey(screenId)) {
-            player.sendMessage(String.format(FORMAT, "§aScreen not found"));
-            return;
-        }
-        final MapScreen mapScreen = PacketMapsCommand.this.temporaryScreenMap.get(screenId);
-        mapScreen.addObserver(player);
-
-        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
-            final VideoCache cache;
-            try {
-                final File file = new File(path);
-                player.sendMessage("reading..");
-                cache = PMCacheUtil.read(file);
-                player.sendMessage("resizing..");
-                cache.resize(mapScreen.getTotalDimensions());
-            } catch (final IOException e) {
-                e.printStackTrace();
-                player.sendMessage(e.getMessage());
-                return;
-            }
-
-            final AtomicInteger currFrame = new AtomicInteger(0);
-            final int maxFrame = cache.getFrameCount();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    final byte[] cachedFrame = cache.getCachedFrames()[currFrame.get()];
-                    mapScreen.getScreenGraphics().setData(cachedFrame);
-
-                    mapScreen.update();
-                    mapScreen.send();
-
-                    if (currFrame.addAndGet(1) >= maxFrame) {
-                        this.cancel();
-                        player.sendMessage("over");
-                    }
-                }
-            }.runTaskTimerAsynchronously(this.plugin, 0, 1);
-        });
     }
 
     @Subcommand("screen")
@@ -175,11 +137,14 @@ public class PacketMapsCommand extends BaseCommand {
                 final GifImage gifImage = new GifImage();
 
                 PacketMapsCommand.this.plugin.getServer().getScheduler().runTaskAsynchronously(PacketMapsCommand.this.plugin, () -> {
-                    final GifCache cache;
+                    final FramedCache cache;
                     try {
                         gifImage.loadFrom(file);
-                        cache = GifCache.buildCache(gifImage, new Dimension(gifImage.getFirstFrame().getWidth(),
-                                gifImage.getFirstFrame().getHeight()), PacketMapsCommand.this.nmsAdapter);
+                        cache = FramedCache.buildCache(gifImage,
+                                new Dimension(gifImage.getFirstFrame().getWidth(),
+                                        gifImage.getFirstFrame().getHeight()),
+                                gifImage.getDecoder().getDelay(0),
+                                PacketMapsCommand.this.nmsAdapter);
 
                         PMCacheUtil.write(file.getParentFile().getAbsolutePath(), file.getName(), cache);
                     } catch (final IOException | IllegalStateException e) {
@@ -198,12 +163,15 @@ public class PacketMapsCommand extends BaseCommand {
                 final GifImage gifImage = new GifImage();
 
                 PacketMapsCommand.this.plugin.getServer().getScheduler().runTaskAsynchronously(PacketMapsCommand.this.plugin, () -> {
-                    final GifCache cache;
+                    final FramedCache cache;
                     try {
                         final URLConnection urlConnection = new URL(url).openConnection();
                         gifImage.loadFrom(urlConnection.getInputStream());
-                        cache = GifCache.buildCache(gifImage, new Dimension(gifImage.getFirstFrame().getWidth(),
-                                gifImage.getFirstFrame().getHeight()), PacketMapsCommand.this.nmsAdapter);
+                        cache = FramedCache.buildCache(gifImage,
+                                new Dimension(gifImage.getFirstFrame().getWidth(),
+                                        gifImage.getFirstFrame().getHeight()),
+                                gifImage.getDecoder().getDelay(0),
+                                PacketMapsCommand.this.nmsAdapter);
 
                         PMCacheUtil.write(outFile, cache);
                     } catch (final IOException | IllegalStateException e) {
@@ -222,7 +190,7 @@ public class PacketMapsCommand extends BaseCommand {
 
             @Subcommand("file")
             public void handleFile(final Player player, final int screenId, final String path) {
-                final GifCache cache;
+                final FramedCache cache;
                 try {
                     cache = PMCacheUtil.read(new File(path));
                 } catch (final IOException | IllegalStateException e) {
@@ -236,7 +204,7 @@ public class PacketMapsCommand extends BaseCommand {
 
             @Subcommand("url")
             public void handleUrl(final Player player, final int screenId, final String url) {
-                final GifCache cache;
+                final FramedCache cache;
                 try {
                     cache = PMCacheUtil.read(new URL(url));
                 } catch (final IOException | IllegalStateException e) {
@@ -248,7 +216,7 @@ public class PacketMapsCommand extends BaseCommand {
                 this.handle(player, screenId, cache);
             }
 
-            private void handle(final Player player, final int screenId, final GifCache cache) {
+            private void handle(final Player player, final int screenId, final FramedCache cache) {
                 if (!PacketMapsCommand.this.temporaryScreenMap.containsKey(screenId)) {
                     player.sendMessage(String.format(FORMAT, "§aScreen not found"));
                     return;
@@ -261,7 +229,9 @@ public class PacketMapsCommand extends BaseCommand {
                     return;
                 }
 
-                player.sendMessage(String.format(FORMAT, "Starting playback..."));
+                final int delayInTicks = Math.max(1, cache.getDelayBetweenFrames() / 50);
+                player.sendMessage(String.format(FORMAT, "Starting playback (delay = " + delayInTicks + ", originally "
+                        + cache.getDelayBetweenFrames() + ")..."));
 
                 cache.resize(mapScreen.getTotalDimensions());
                 final GifRendererTask gifRendererTask = new GifRendererTask(mapScreen, cache);
@@ -272,12 +242,15 @@ public class PacketMapsCommand extends BaseCommand {
                     public void run() {
                         gifRendererTask.run();
 
-                        if (count.incrementAndGet() >= 500) {
+                        if (count.incrementAndGet() >= ((30 * 20) / delayInTicks)) {
                             this.cancel();
                             player.sendMessage(String.format(FORMAT, "Done"));
                         }
+
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§dPlayback will end in "
+                                + ((((30 * 20) / delayInTicks) - count.get()) / 20) + "s"));
                     }
-                }.runTaskTimerAsynchronously(PacketMapsCommand.this.plugin, 0, 1);
+                }.runTaskTimerAsynchronously(PacketMapsCommand.this.plugin, 0, delayInTicks);
             }
 
         }
