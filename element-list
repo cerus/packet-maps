@@ -1,0 +1,13 @@
+de.cerus.packetmaps.core.factory
+de.cerus.packetmaps.core.gif.task
+de.cerus.packetmaps.core.pmcache
+de.cerus.packetmaps.core.screen
+de.cerus.packetmaps.core.screen.threedim
+de.cerus.packetmaps.core.screen.threedim.shape
+de.cerus.packetmaps.nmsbase
+de.cerus.packetmaps.nmsbase.util
+de.cerus.packetmaps.plugin
+de.cerus.packetmaps.plugin.commands
+de.cerus.packetmaps.plugin.util
+de.cerus.packetmaps.tools
+de.cerus.packetmaps.v1_16_3
