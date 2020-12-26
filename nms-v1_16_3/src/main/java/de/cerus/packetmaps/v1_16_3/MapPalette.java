@@ -13,7 +13,7 @@ public enum MapPalette {
     TRANSPARENT_0(0, null),
     TRANSPARENT_1(1, null),
     TRANSPARENT_2(2, null),
-    TRANSPARENT_3(0, null),
+    TRANSPARENT_3(3, null),
 
     GREEN_0(4, new Color(88, 124, 39)),
     GREEN_1(5, new Color(108, 151, 47)),
