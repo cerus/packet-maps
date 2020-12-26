@@ -29,11 +29,20 @@ public interface DrawAdapter {
 
     void drawImage(BufferedImage image, int x, int z, int width, int height);
 
+    default void setPixels(final byte[][] arr) {
+        for (int x = 0; x < arr.length; x++) {
+            final byte[] bytes = arr[x];
+            for (int y = 0; y < bytes.length; y++) {
+                this.setPixel(x, y, bytes[y]);
+            }
+        }
+    }
+
     DiffResult diff(DrawAdapter drawAdapter);
 
     byte[][] toArray();
 
-    byte[] toSingleArray();
+    byte[] toOneDimArray();
 
     class DiffResult {
 

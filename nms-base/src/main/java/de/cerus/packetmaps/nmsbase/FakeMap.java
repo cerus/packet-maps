@@ -59,7 +59,7 @@ public class FakeMap {
                 this.trackPos,
                 this.locked,
                 this.icons,
-                /*diffResult.getData() The packet needs the whole data unfortunately...*/ newData.toSingleArray(),
+                /*diffResult.getData() The packet needs the whole data unfortunately...*/ newData.toOneDimArray(),
                 diffResult.getMinX(),
                 diffResult.getMinZ(),
                 diffResult.getWidth(),
@@ -69,7 +69,7 @@ public class FakeMap {
     }
 
     public void cacheData() {
-        this.cachedData = this.data.toSingleArray();
+        this.cachedData = this.data.toOneDimArray();
     }
 
     public void addObserver(final Player player) {

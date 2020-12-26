@@ -93,8 +93,8 @@ public class DrawAdapterImpl implements DrawAdapter {
 
     @Override
     public DiffResult diff(final DrawAdapter drawAdapter) {
-        final byte[] thisData = this.toSingleArray();
-        final byte[] thatData = drawAdapter.toSingleArray();
+        final byte[] thisData = this.toOneDimArray();
+        final byte[] thatData = drawAdapter.toOneDimArray();
         byte[] newData = new byte[0];
 
         int minX = -1;
@@ -180,7 +180,7 @@ public class DrawAdapterImpl implements DrawAdapter {
     }
 
     @Override
-    public byte[] toSingleArray() {
+    public byte[] toOneDimArray() {
         final byte[] arr = new byte[128 * 128];
         for (int x = 0; x < 128; x++) {
             for (int z = 0; z < 128; z++) {

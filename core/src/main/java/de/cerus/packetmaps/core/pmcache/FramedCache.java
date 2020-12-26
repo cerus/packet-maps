@@ -31,7 +31,7 @@ public class FramedCache implements Cache {
     }
 
     public static FramedCache convert(final DrawAdapter drawAdapter, final Dimension dimension, final NmsAdapter nmsAdapter) {
-        final byte[] bytes = drawAdapter.toSingleArray();
+        final byte[] bytes = drawAdapter.toOneDimArray();
         final byte[][] data = new byte[1][];
         data[0] = bytes;
 
