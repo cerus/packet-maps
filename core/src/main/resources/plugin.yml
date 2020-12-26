@@ -1,9 +1,0 @@
-name: PacketMaps
-author: Cerus
-version: ${project.version}
-main: de.cerus.packetmaps.core.PacketMapsPlugin
-api-version: 1.16
-
-commands:
-  test:
-    description: "F"
