@@ -147,7 +147,7 @@ public class ScreenGraphics {
                     // Increment z if the char is a line separator
                     x = xStart;
                     z += font.getHeight() + 1;
-                } else if (ch == '§') {
+                } else if (ch == '\u00A7' /*-> §*/) {
                     // Get distance from current char to end char (';')
                     final int end = text.indexOf(';', currentIndex);
                     if (end < 0) {
@@ -220,5 +220,5 @@ public class ScreenGraphics {
     public Dimension getScreenDimension() {
         return this.screenDimension;
     }
-    
+
 }
