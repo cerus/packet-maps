@@ -33,5 +33,14 @@ The `tools` module contains tools that make the development of `packet-maps` sig
 
 ## Using the library
 
-I will create a wiki for this library in the next few hours - stay tuned. In the meantime you could take a look at the `MapScreen` class in the `core`
-module or the `FakeMap` class in the `nms-base` module.
+Check out the [wiki](https://github.com/cerus/packet-maps/wiki)!
+
+## packet-maps in action
+
+[Playing GIFs](https://www.youtube.com/watch?v=tvmkfxCtFQc)
+
+[Playing a (very) short video](https://www.youtube.com/watch?v=kwjzMHfWp38)
+
+[Basic 3D rendering](https://www.youtube.com/watch?v=MSdLTMkaQ5Q)
+
+[Rendering the Minecraft world onto a map](https://www.youtube.com/watch?v=AsvD89DS_rI)
