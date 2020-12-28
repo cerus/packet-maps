@@ -43,6 +43,10 @@ Check out the [wiki](https://github.com/cerus/packet-maps/wiki)!
 
 [Basic 3D rendering](https://www.youtube.com/watch?v=MSdLTMkaQ5Q)
 
+### Rendering the Minecraft world onto a map
+
+Note: this is a separate plugin using `packet-maps` as its backbone.
+
 [Rendering the Minecraft world onto a map](https://www.youtube.com/watch?v=AsvD89DS_rI)
 
 [Rendering the Minecraft world onto a map - Update: texture & shadow showcase](https://youtu.be/c1oOKlEkebI)
