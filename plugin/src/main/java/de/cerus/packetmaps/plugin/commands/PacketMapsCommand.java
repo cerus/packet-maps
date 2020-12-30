@@ -40,7 +40,7 @@ public class PacketMapsCommand extends BaseCommand {
 
     private static final String FORMAT = "§6Packet Maps §8» §7%s";
 
-    private final Map<Integer, MapScreen> temporaryScreenMap = new HashMap<>();
+    private static final Map<Integer, MapScreen> temporaryScreenMap = new HashMap<>();
     private final List<Triangle> tris = new ArrayList<Triangle>() {
         {
             this.add(new Triangle(new Vertex(100, 100, 100),

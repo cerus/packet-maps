@@ -36,6 +36,13 @@
         </dependency>
 
         <dependency>
+            <groupId>de.cerus.packetmaps</groupId>
+            <artifactId>nms-v1_16_4</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.RealCerus</groupId>
             <artifactId>JGif</artifactId>
             <version>1.0.0</version>

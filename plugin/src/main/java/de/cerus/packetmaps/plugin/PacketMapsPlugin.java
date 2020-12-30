@@ -15,6 +15,9 @@ public class PacketMapsPlugin extends JavaPlugin {
         final NmsAdapter nmsAdapter = nmsAdapterFactory.makeAdapter();
         final DrawAdapterFactory drawAdapterFactory = new DrawAdapterFactory();
 
+        this.getLogger().info("Using nms '" + nmsAdapter.getClass().getName()
+                .replace("de.cerus.packetmaps.", "").split("\\.")[0] + "'");
+
         final BukkitCommandManager commandManager = new BukkitCommandManager(this);
         commandManager.registerDependency(NmsAdapter.class, nmsAdapter);
         commandManager.registerDependency(DrawAdapterFactory.class, drawAdapterFactory);
