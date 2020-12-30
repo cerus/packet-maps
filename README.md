@@ -15,17 +15,19 @@ have that problem, the changes are only client side and won't affect the 'real' 
 
 ## Modules
 
-This project consists of five modules:
+This project consists of six modules:
 
 - core
 - nms-base
 - nms-v1_16_3
+- nms-v1_16_4
 - plugin
 - tools
 
 The `core` module contains stuff like a MapScreen class and caches.\
 The `nms-base` module contains common classes that are needed by version-specific implementations.\
-The `nms-v1_16_3` is an implementation for the Minecraft version 1.16.3 (although it should work on other 1.16 versions too).\
+The `nms-v1_16_3` is an implementation for the Minecraft version 1.16.3.\
+The `nms-v1_16_4` is an implementation for the Minecraft version 1.16.4.\
 The `plugin` module is a simple implementation of this library.\
 The `tools` module contains tools that make the development of `packet-maps` significantly easier.
 
