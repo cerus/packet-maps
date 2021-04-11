@@ -99,6 +99,16 @@ public class MapScreen {
         return (((val) * (127 - -128)) / 128) + -128;
     }
 
+    public void sendScreenPart(final int col, final int row, final int minX, final int minZ, final int width, final int height, final byte[] data) {
+        // Get frame and map at col & row
+        final Entity frame = this.entities[col][row];
+        final FakeMap fakeMap = this.fakeMaps[col][row];
+
+        fakeMap.sendSlice(minX, minZ, width, height, data);
+        fakeMap.getObservers().forEach(player ->
+                this.nmsAdapter.sendPacket(player, this.nmsAdapter.constructFramePacket(frame.getEntityId(), fakeMap.getId())));
+    }
+
     /**
      * Sends the maps to the observers
      */

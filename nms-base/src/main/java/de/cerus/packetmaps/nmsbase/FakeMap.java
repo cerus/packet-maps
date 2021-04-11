@@ -38,6 +38,20 @@ public class FakeMap {
         this.sendCached();
     }
 
+    public void sendSlice(final int fromX, final int fromZ, final int width, final int height, final byte[] slice) {
+        final Object packet = this.nmsAdapter.constructMapPacket(this.id,
+                this.scale,
+                this.trackPos,
+                this.locked,
+                this.icons,
+                slice,
+                fromX,
+                fromZ,
+                width,
+                height);
+        this.getObservers().forEach(player -> this.nmsAdapter.sendPacket(player, packet));
+    }
+
     public void sendCached() {
         final Object packet = this.nmsAdapter.constructMapPacket(this.id,
                 this.scale,
