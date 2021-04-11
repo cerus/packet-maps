@@ -15,6 +15,8 @@ public class IntelligentMapScreenCanvas {
 
     private static int WIDTH;
     private static int HEIGHT;
+    private static int WIDTH_NORM;
+    private static int HEIGHT_NORM;
 
     private final IntelligentMapCanvas[] canvases;
     private final MapScreen mapScreen;
@@ -24,7 +26,9 @@ public class IntelligentMapScreenCanvas {
 
         WIDTH = mapScreen.getTotalWidth();
         HEIGHT = mapScreen.getTotalHeight();
-        this.canvases = new IntelligentMapCanvas[WIDTH * HEIGHT];
+        WIDTH_NORM = WIDTH / 128;
+        HEIGHT_NORM = HEIGHT / 128;
+        this.canvases = new IntelligentMapCanvas[WIDTH_NORM * HEIGHT_NORM];
 
         for (int i = 0; i < this.canvases.length; i++) {
             this.canvases[i] = new IntelligentMapCanvas(null);
@@ -32,15 +36,16 @@ public class IntelligentMapScreenCanvas {
     }
 
     public void send() {
-        for (int x = 0; x < WIDTH; x++) {
-            for (int z = 0; z < HEIGHT; z++) {
+        for (int x = 0; x < WIDTH_NORM; x++) {
+            for (int z = 0; z < HEIGHT_NORM; z++) {
                 final int finalX = x;
                 final int finalZ = z;
 
-                final IntelligentMapCanvas canvas = this.canvases[x + z * WIDTH];
+                final IntelligentMapCanvas canvas = this.canvases[x + z * WIDTH_NORM];
                 final FakeMap fakeMap = new FakeMap(null, null) {
                     @Override
                     public void sendSlice(final int fromX, final int fromZ, final int width, final int height, final byte[] slice) {
+                        //System.out.println(finalX + " " + finalZ + " => " + fromX + ", " + fromZ + ", " + width + ", " + height);
                         IntelligentMapScreenCanvas.this.mapScreen.sendScreenPart(finalX, finalZ, fromX, fromZ, width, height, slice);
                     }
                 };
@@ -229,7 +234,7 @@ public class IntelligentMapScreenCanvas {
 
         final int arrayX = x == 0 ? 0 : x / 128;
         final int arrayZ = z == 0 ? 0 : z / 128;
-        final IntelligentMapCanvas canvas = this.canvases[arrayX + arrayZ * WIDTH];
+        final IntelligentMapCanvas canvas = this.canvases[arrayX + arrayZ * WIDTH_NORM];
         canvas.setPixel(x % 128, z % 128, color);
     }
 

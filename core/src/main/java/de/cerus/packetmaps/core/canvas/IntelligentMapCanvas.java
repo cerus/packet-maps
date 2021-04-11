@@ -31,17 +31,10 @@ public class IntelligentMapCanvas {
         final int effectiveMaxZ = (this.maxZ == -1 ? HEIGHT : this.maxZ);
         final int effectiveMinX = (this.minX == -1 ? 0 : this.minX);
         final int effectiveMinZ = (this.minZ == -1 ? 0 : this.minZ);
-        final int width = Math.max(effectiveMaxX, effectiveMinX) - Math.min(effectiveMaxX, effectiveMinX);
-        final int height = Math.max(effectiveMaxZ, effectiveMinZ) - Math.min(effectiveMaxZ, effectiveMinZ);
+        final int width = Math.max(effectiveMaxX, effectiveMinX) + 1 - Math.min(effectiveMaxX, effectiveMinX);
+        final int height = Math.max(effectiveMaxZ, effectiveMinZ) + 1 - Math.min(effectiveMaxZ, effectiveMinZ);
 
-        final byte[] slice = new byte[width * height];
-        for (int x = 0; x < width; x++) {
-            for (int z = 0; z < height; z++) {
-                slice[x + z * width] = this.data[(x + effectiveMinX) + (z + effectiveMinZ) * WIDTH];
-            }
-        }
-
-        this.fakeMap.sendSlice(effectiveMinX, effectiveMinZ, width, height, slice);
+        this.fakeMap.sendSlice(effectiveMinX, effectiveMinZ, width, height, this.data);
         this.reset();
     }
 
@@ -224,6 +217,9 @@ public class IntelligentMapCanvas {
             return;
         }
 
+        if (this.data[x + z * WIDTH] == color) {
+            return;
+        }
         this.data[x + z * WIDTH] = color;
 
         if (this.minX == -1 || this.minX > x) {

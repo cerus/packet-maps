@@ -13,6 +13,7 @@ public class NmsAdapterFactory {
             case "1.16.3":
                 return new de.cerus.packetmaps.v1_16_3.NmsAdapterImpl();
             case "1.16.4":
+            case "1.16.5":
                 return new de.cerus.packetmaps.v1_16_4.NmsAdapterImpl();
             default:
                 throw new IllegalStateException("Invalid server version '" + version + "'");
