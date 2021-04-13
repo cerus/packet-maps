@@ -27,6 +27,10 @@ public class IntelligentMapCanvas {
     }
 
     public void send() {
+        if (this.minX == -1 && this.minZ == -1 && this.maxX == -1 && this.maxZ == -1) {
+            return;
+        }
+
         final int effectiveMaxX = (this.maxX == -1 ? WIDTH : this.maxX);
         final int effectiveMaxZ = (this.maxZ == -1 ? HEIGHT : this.maxZ);
         final int effectiveMinX = (this.minX == -1 ? 0 : this.minX);

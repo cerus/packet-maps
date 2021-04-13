@@ -15,6 +15,7 @@
         <module>nms-v1_16_3</module>
         <module>nms-v1_16_4</module>
         <module>tools</module>
+        <module>plugin-tools</module>
     </modules>
     <packaging>pom</packaging>
 

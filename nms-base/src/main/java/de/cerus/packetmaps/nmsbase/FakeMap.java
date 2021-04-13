@@ -39,6 +39,7 @@ public class FakeMap {
     }
 
     public void sendSlice(final int fromX, final int fromZ, final int width, final int height, final byte[] slice) {
+        //System.out.println("SENDING " + width + "x" + height + " @ " + fromX + " " + fromZ + ": " + slice.length);
         final Object packet = this.nmsAdapter.constructMapPacket(this.id,
                 this.scale,
                 this.trackPos,
@@ -47,8 +48,8 @@ public class FakeMap {
                 slice,
                 fromX,
                 fromZ,
-                width,
-                height);
+                Math.min(width, 128),
+                Math.min(height, 128));
         this.getObservers().forEach(player -> this.nmsAdapter.sendPacket(player, packet));
     }
 

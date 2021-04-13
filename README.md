@@ -29,7 +29,8 @@ The `nms-base` module contains common classes that are needed by version-specifi
 The `nms-v1_16_3` is an implementation for the Minecraft version 1.16.3.\
 The `nms-v1_16_4` is an implementation for the Minecraft version 1.16.4.\
 The `plugin` module is a simple implementation of this library.\
-The `tools` module contains tools that make the development of `packet-maps` significantly easier.
+The `tools` module contains tools that make the development of `packet-maps` significantly easier.\
+The `plugin-tools` module contains useful utilities for creating plugins with `packet-maps`.
 
 > **Note**: The `plugin` module is ***NOT*** meant for usage on a production server. It is mainly used by me to test the libraries functionalities. You COULD use it, but you should expect bugs and/or unwanted behaviour.
 
