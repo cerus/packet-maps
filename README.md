@@ -32,7 +32,7 @@ The `plugin` module is a simple implementation of this library.\
 The `tools` module contains tools that make the development of `packet-maps` significantly easier.\
 The `plugin-tools` module contains useful utilities for creating plugins with `packet-maps`.
 
-> **Note**: The `plugin` module is ***NOT*** meant for usage on a production server. It is mainly used by me to test the libraries functionalities. You COULD use it, but you should expect bugs and/or unwanted behaviour.
+> **Note**: The `plugin` module is ***NOT*** meant for usage on a production server. It is mainly used by me to test the library's functionalities. You COULD use it, but you should expect bugs and/or unwanted behaviour.
 
 ## Using the library
 
