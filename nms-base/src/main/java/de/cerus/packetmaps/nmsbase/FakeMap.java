@@ -20,6 +20,7 @@ public class FakeMap {
     protected DrawAdapter data;
     protected NmsAdapter nmsAdapter;
     protected List<WeakReference<Player>> observers;
+    protected SliceData latestSlice;
     private byte[] cachedData;
 
     public FakeMap(final NmsAdapter nmsAdapter, final DrawAdapter drawAdapter) {
@@ -38,19 +39,37 @@ public class FakeMap {
         this.sendCached();
     }
 
-    public void sendSlice(final int fromX, final int fromZ, final int width, final int height, final byte[] slice) {
-        //System.out.println("SENDING " + width + "x" + height + " @ " + fromX + " " + fromZ + ": " + slice.length);
-        final Object packet = this.nmsAdapter.constructMapPacket(this.id,
+    public void sendLatestSlice(final Player player) {
+        this.sendLatestSlice(player, null);
+    }
+
+    public void sendLatestSlice(final Player player, final Integer frameId) {
+        if (frameId != null) {
+            this.nmsAdapter.sendPacket(player, this.nmsAdapter.constructFramePacket(frameId, this.id));
+        }
+        this.nmsAdapter.sendPacket(player, this.nmsAdapter.constructMapPacket(this.id,
                 this.scale,
                 this.trackPos,
                 this.locked,
                 this.icons,
-                slice,
-                fromX,
-                fromZ,
-                Math.min(width, 128),
-                Math.min(height, 128));
-        this.getObservers().forEach(player -> this.nmsAdapter.sendPacket(player, packet));
+                this.latestSlice.data,
+                this.latestSlice.x,
+                this.latestSlice.z,
+                Math.min(this.latestSlice.w, 128),
+                Math.min(this.latestSlice.h, 128)));
+    }
+
+    public void sendSlice(final int fromX, final int fromZ, final int width, final int height, final byte[] slice) {
+        this.latestSlice = new SliceData() {
+            {
+                this.data = slice;
+                this.x = fromX;
+                this.z = fromZ;
+                this.w = width;
+                this.h = height;
+            }
+        };
+        this.getObservers().forEach(player -> this.sendLatestSlice(player, null));
     }
 
     public void sendCached() {
@@ -88,6 +107,9 @@ public class FakeMap {
     }
 
     public void addObserver(final Player player) {
+        if (this.observers.stream().anyMatch(playerWeakReference -> playerWeakReference.get() == player)) {
+            return;
+        }
         this.observers.add(new WeakReference<>(player));
     }
 
@@ -153,6 +175,15 @@ public class FakeMap {
 
     public void setCachedData(final byte[] cachedData) {
         this.cachedData = cachedData;
+    }
+
+    public static class SliceData {
+
+        public byte[] data;
+        public int x;
+        public int z;
+        public int w;
+        public int h;
     }
 
 }

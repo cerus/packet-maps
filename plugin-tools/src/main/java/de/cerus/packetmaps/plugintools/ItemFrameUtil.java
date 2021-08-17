@@ -2,7 +2,7 @@ package de.cerus.packetmaps.plugintools;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
@@ -119,11 +119,15 @@ public class ItemFrameUtil {
         return new ItemFrameGridResult(list, frames, width, height);
     }
 
-    private static ItemFrame getItemFrameAt(final World world, final int x, final int y, final int z, final BlockFace facing) {
-        final Optional<Entity> optional = world.getNearbyEntities(new Location(world, x, y, z), 1, 1, 1, entity ->
-                entity instanceof ItemFrame && entity.getLocation().getBlockX() == x && entity.getLocation().getBlockY() == y
-                        && entity.getLocation().getBlockZ() == z && entity.getFacing() == facing).stream().findAny();
-        return (ItemFrame) optional.orElse(null);
+    public static ItemFrame getItemFrameAt(final World world, final int x, final int y, final int z, final BlockFace facing) {
+        final Chunk chunk = new Location(world, x, y, z).getChunk();
+        for (final Entity entity : chunk.getEntities()) {
+            if (entity instanceof ItemFrame && entity.getLocation().getBlockX() == x && entity.getLocation().getBlockY() == y
+                    && entity.getLocation().getBlockZ() == z && entity.getFacing() == facing) {
+                return (ItemFrame) entity;
+            }
+        }
+        return null;
     }
 
     public static class ItemFrameGridResult {

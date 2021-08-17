@@ -169,7 +169,7 @@ public class IntelligentMapScreenCanvas {
      * @param z    z coordinate
      * @param text The text
      */
-    public void drawText(int x, int z, final String text, final byte startColor) {
+    public void drawText(int x, int z, final String text, final byte startColor, final int size) {
         final MapFont font = MinecraftFont.Font;
 
         final int xStart = x;
@@ -210,13 +210,17 @@ public class IntelligentMapScreenCanvas {
                     for (int row = 0; row < font.getHeight(); ++row) {
                         for (int col = 0; col < sprite.getWidth(); ++col) {
                             if (sprite.get(row, col)) {
-                                this.setPixel(x + col, z + row, color);
+                                for (int eX = 0; eX < size; eX++) {
+                                    for (int eZ = 0; eZ < size; eZ++) {
+                                        this.setPixel(x + (size * col) + (eX), z + (size * row) + (eZ), color);
+                                    }
+                                }
                             }
                         }
                     }
 
                     // Increment x
-                    x += sprite.getWidth() + 1;
+                    x += (sprite.getWidth() + 1) * size;
                 }
 
                 ++currentIndex;

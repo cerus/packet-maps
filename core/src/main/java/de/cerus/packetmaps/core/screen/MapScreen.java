@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 /**
  * A screen spanning a rectangular area using item frames and fake maps
@@ -22,6 +23,8 @@ public class MapScreen {
     private final NmsAdapter nmsAdapter;
     private final ScreenGraphics screenGraphics;
     private final Map<Point, MapIcon> iconMap;
+    private final Vector lowerLeftCorner;
+    private final Vector upperRightCorner;
     private FakeMap[][] fakeMaps;
 
     public MapScreen(final int width, final int height, final Entity[][] entities, final NmsAdapter nmsAdapter) {
@@ -31,6 +34,9 @@ public class MapScreen {
         this.nmsAdapter = nmsAdapter;
         this.screenGraphics = new ScreenGraphics(this.getTotalDimensions(), nmsAdapter);
         this.iconMap = new HashMap<>();
+
+        this.lowerLeftCorner = entities[0][0].getLocation().toVector();
+        this.upperRightCorner = entities[entities.length - 1][entities[entities.length - 1].length - 1].getLocation().toVector();
 
         this.createFakeMaps();
     }
@@ -97,6 +103,17 @@ public class MapScreen {
      */
     private int scale(final int val) {
         return (((val) * (127 - -128)) / 128) + -128;
+    }
+
+    public void sendLatest(final Player player) {
+        for (int col = 0; col < this.width; col++) {
+            for (int row = 0; row < this.height; row++) {
+                final Entity frame = this.entities[col][row];
+                final FakeMap fakeMap = this.fakeMaps[col][row];
+
+                fakeMap.sendLatestSlice(player, frame.getEntityId());
+            }
+        }
     }
 
     public void sendScreenPart(final int col, final int row, final int minX, final int minZ, final int width, final int height, final byte[] data) {
@@ -196,6 +213,22 @@ public class MapScreen {
 
     public int getTotalHeight() {
         return this.height * 128;
+    }
+
+    public Entity[][] getEntities() {
+        return this.entities;
+    }
+
+    public FakeMap[][] getFakeMaps() {
+        return this.fakeMaps;
+    }
+
+    public Vector getLowerLeftCorner() {
+        return this.lowerLeftCorner;
+    }
+
+    public Vector getUpperRightCorner() {
+        return this.upperRightCorner;
     }
 
 }
