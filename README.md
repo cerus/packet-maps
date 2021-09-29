@@ -1,3 +1,10 @@
+# This project is archived
+
+An updated and maintained successor of this project can be found [here](https://github.com/cerus/maps).
+
+<hr>
+<br><br><br>
+
 # packet-maps
 
 Library for doing cool stuff with Minecraft maps using packets
